@@ -31,6 +31,8 @@ namespace Alladin.Logic
 
         public int GetDistance(Pos tgt)
         {
+            if(tgt == null)
+                return -1;
             var dist = _map[GetIndex(tgt)];
             if(dist == -1)
                 return -1;
