@@ -45,7 +45,7 @@ namespace Alladin.Bots
 
             Console.Out.WriteLine("bot finished");
 
-            Console.WriteLine(serverStuff.viewURL);
+            Console.WriteLine(serverStuff.viewURL);            
         }
 
         public string MakeMove()
