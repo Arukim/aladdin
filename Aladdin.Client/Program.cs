@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Linq;
+using Aladdin.Config;
+using Aladdin.DAL;
+using Aladdin.DAL.Interfaces;
+using Aladdin.DAL.Models;
 using Alladin.Bots;
 
 namespace Alladin
@@ -8,6 +13,10 @@ namespace Alladin
         static void Main(string[] args)
         {
             string serverURL = args.Length == 4 ? args[3] : "http://vindinium.org";
+
+            var accDataProvider = Config.GetService<IAccountDataProvider>();
+            
+            Console.WriteLine(string.Join("",accDataProvider.GetAll().Select(x => $"{x.Name}:{x.Token}")));
 
             while (true)
             {

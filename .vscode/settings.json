@@ -1,0 +1,10 @@
+{
+    "search.exclude": {
+        "obj/": true,
+        "bin/": true
+    },
+    "files.exclude": {
+        "**/*obj/": true,
+        "**/*bin/": true
+    }
+}
