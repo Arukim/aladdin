@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Alladin.Models;
 using Newtonsoft.Json;
+using Aladdin.Game.Models;
 
-namespace Alladin
+namespace Aladdin.Game
 {
     /*
     * Mostly ported from .NET sample

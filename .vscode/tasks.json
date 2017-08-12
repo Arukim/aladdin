@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/Aladdin.Client/aladdin.csproj"
+                "${workspaceRoot}/Client/Aladdin.Client.csproj"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"

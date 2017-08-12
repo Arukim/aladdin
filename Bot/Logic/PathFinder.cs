@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Alladin.Models;
+using Aladdin.Game.Models;
 
-namespace Alladin.Logic
+namespace Aladdin.Bot.Logic
 {
     /*
     * Analyse map, create turn path-map

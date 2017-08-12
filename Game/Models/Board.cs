@@ -1,4 +1,4 @@
-namespace Alladin.Models
+namespace Aladdin.Game.Models
 {
     public class Board
     {

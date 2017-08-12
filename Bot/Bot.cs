@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Alladin.Helpers;
-using Alladin.Logic;
-using Alladin.Models;
+using Aladdin.Common;
+using Aladdin.Bot.Helpers;
+using Aladdin.Bot.Logic;
+using Aladdin.Game;
+using Aladdin.Game.Models;
 
-namespace Alladin.Bots
+namespace Aladdin.Bot
 {
-    public class Bot
+    public class Player
     {
         private ServerStuff serverStuff;
 
-        public Bot(ServerStuff serverStuff)
+        public Player(ServerStuff serverStuff)
         {
             this.serverStuff = serverStuff;
         }

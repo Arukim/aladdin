@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Alladin.Helpers
+namespace Aladdin.Bot.Helpers
 {
     public class MultiWatch
     {

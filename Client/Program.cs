@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
-using Aladdin.Config;
+using Aladdin.Common;
 using Aladdin.DAL;
 using Aladdin.DAL.Interfaces;
 using Aladdin.DAL.Models;
-using Alladin.Bots;
+using Aladdin.Game;
+using Aladdin.Bot;
 
-namespace Alladin
+namespace Aladdin
 {
     class Program
     {
@@ -14,9 +15,18 @@ namespace Alladin
         {
             string serverURL = args.Length == 4 ? args[3] : "http://vindinium.org";
 
-            var accDataProvider = Config.GetService<IAccountDataProvider>();
-            
-            Console.WriteLine(string.Join("",accDataProvider.GetAll().Select(x => $"{x.Name}:{x.Token}")));
+            var sp = Container.Create()
+                    .RegisterDAL();
+
+            Container.Build(sp);
+
+            var accDataProvider = Container.GetService<IAccountDataProvider>();
+
+            Console.WriteLine(string.Join("",
+                accDataProvider.GetAll()
+                                    .ToList()
+                                    .Select(x => $"{x.Name}:{x.Token}")
+                                    ));
 
             while (true)
             {
@@ -25,7 +35,7 @@ namespace Alladin
                 ServerStuff serverStuff = new ServerStuff(args[0], args[1] != "arena", uint.Parse(args[2]), serverURL, null);
 
                 //create the random bot, replace this with your own bot
-                var bot = new Bot(serverStuff);
+                var bot = new Player(serverStuff);
 
                 //now kick it all off by running the bot.
                 bot.Run().GetAwaiter().GetResult();

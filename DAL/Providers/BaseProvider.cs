@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aladdin.DAL.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -40,18 +41,9 @@ namespace Aladdin.DAL.Providers
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            using (var cursor = Collection.FindSync<T>(new BsonDocument()))
-            {
-                while (cursor.MoveNext())
-                {
-                    foreach (var entity in cursor.Current)
-                    {
-                        yield return entity;
-                    }
-                }
-            }
+            return Collection.AsQueryable();
         }
 
 #endregion

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Alladin.Models
+namespace Aladdin.Game.Models
 {
     public class Game
     {

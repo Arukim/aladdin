@@ -5,9 +5,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aladdin.DAL\Aladdin.DAL.csproj" />
+    <ProjectReference Include="..\Common\Aladdin.Common.csproj" />
+    <ProjectReference Include="..\DAL\Aladdin.DAL.csproj" />
+    <ProjectReference Include="..\Game\Aladdin.Game.csproj" />
+    <ProjectReference Include="..\Bot\Aladdin.Bot.csproj" />
   </ItemGroup>
 </Project>
