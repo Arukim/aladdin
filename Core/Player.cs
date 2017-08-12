@@ -3,54 +3,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aladdin.Common;
-using Aladdin.Bot.Helpers;
-using Aladdin.Bot.Logic;
+using Aladdin.Core.Helpers;
+using Aladdin.Core.Logic;
+using Aladdin.Core.Models;
 using Aladdin.Game;
 using Aladdin.Game.Models;
 
-namespace Aladdin.Bot
+namespace Aladdin.Core
 {
     public class Player
     {
         private ServerStuff serverStuff;
+        private readonly string _name;
 
-        public Player(ServerStuff serverStuff)
+        public string Name => _name;
+
+        public Player(string name, ServerStuff serverStuff)
         {
+            _name = name;
             this.serverStuff = serverStuff;
         }
 
         //starts everything
-        public async Task Run()
+        public async Task<GameResult> Run()
         {
-            Console.Out.WriteLine("waiting for game");
+            Console.WriteLine($"{Name} is waiting for game");
 
             await serverStuff.CreateGame();
 
             if (serverStuff.errored == false)
             {
-                Console.WriteLine(serverStuff.viewURL);
+                Console.WriteLine($"{Name} has joined game {serverStuff.viewURL}");
+            }
+            else
+            {
+                return new GameResult();
             }
 
-            Random random = new Random();
             while (serverStuff.finished == false && serverStuff.errored == false)
             {
                 var dir = MakeMove();
                 await serverStuff.moveHero(dir);
 
-                Console.Out.WriteLine("completed turn " + serverStuff.currentTurn);
+                //Console.WriteLine("completed turn " + serverStuff.currentTurn);
             }
 
             if (serverStuff.errored)
             {
-                Console.Out.WriteLine("error: " + serverStuff.errorText);
+                Console.Out.WriteLine($"{Name} error in game: " + serverStuff.errorText);
             }
 
-            Console.Out.WriteLine("bot finished");
+            Console.Out.WriteLine($"{Name} has finished game {serverStuff.viewURL}");
 
-            Console.WriteLine(serverStuff.viewURL);            
+            return new GameResult();
         }
 
-        public string MakeMove()
+        protected string MakeMove()
         {
             var watch = new MultiWatch();
             watch.Start("total");
@@ -77,11 +85,11 @@ namespace Aladdin.Bot
             watch.Stop("nearest");
 
             watch.Start("dist");
-            var enemyDist =  pathFinder.GetDistance(enemy);
+            var enemyDist = pathFinder.GetDistance(enemy);
             var tavernDist = pathFinder.GetDistance(tavern);
             watch.Stop("dist");
 
-            Console.WriteLine($"Tavern: {tavern}, neutral: {neutralMine}, notMine: {notMineMine}");
+            //Console.WriteLine($"Tavern: {tavern}, neutral: {neutralMine}, notMine: {notMineMine}");
             var dir = Direction.Stay;
             if (serverStuff.myHero.Life < 30)
             {
@@ -102,19 +110,20 @@ namespace Aladdin.Bot
 
             if (target == null)
             {
-                Console.WriteLine("I would stay");
+                //Console.WriteLine("I would stay");
             }
             else
             {
                 dir = watch.Measure("getDirection", () => pathFinder.GetDirection(target));
-                Console.WriteLine($"I want to go from {hero.X}:{hero.Y} to {target.X}:{target.Y} using {dir}");
+                //Console.WriteLine($"I want to go from {hero.X}:{hero.Y} to {target.X}:{target.Y} using {dir}");
             }
             watch.Stop("total");
 
-            Console.WriteLine(string.Join(",", watch.Marks.Select(x => $"{x.Item1}:{x.Item2}")));
+            //Console.WriteLine(string.Join(",", watch.Marks.Select(x => $"{x.Item1}:{x.Item2}")));
             return dir;
         }
-        public Pos FindNearest(List<Tile> tiles, PathFinder pathFinder, Func<Tile, bool> cmp)
+
+        protected Pos FindNearest(List<Tile> tiles, PathFinder pathFinder, Func<Tile, bool> cmp)
         {
             var targets = tiles.Where(cmp);
 

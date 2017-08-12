@@ -10,6 +10,6 @@
     <ProjectReference Include="..\Common\Aladdin.Common.csproj" />
     <ProjectReference Include="..\DAL\Aladdin.DAL.csproj" />
     <ProjectReference Include="..\Game\Aladdin.Game.csproj" />
-    <ProjectReference Include="..\Bot\Aladdin.Bot.csproj" />
+    <ProjectReference Include="..\Core\Aladdin.Core.csproj" />
   </ItemGroup>
 </Project>

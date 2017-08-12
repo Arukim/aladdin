@@ -3,10 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Aladdin.Common.csproj" />
     <ProjectReference Include="..\Game\Aladdin.Game.csproj" />
+    <ProjectReference Include="..\DAL\Aladdin.DAL.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
 </Project>

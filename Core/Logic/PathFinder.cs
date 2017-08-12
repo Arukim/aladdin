@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Aladdin.Game.Models;
 
-namespace Aladdin.Bot.Logic
+namespace Aladdin.Core.Logic
 {
     /*
     * Analyse map, create turn path-map

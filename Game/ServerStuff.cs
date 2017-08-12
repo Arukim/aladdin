@@ -93,19 +93,27 @@ namespace Aladdin.Game
 
         private void deserialize(string json)
         {
-            var gameResponse = JsonConvert.DeserializeObject<GameResponse>(json);
+            try
+            {
+                var gameResponse = JsonConvert.DeserializeObject<GameResponse>(json);
 
-            playURL = gameResponse.playUrl;
-            viewURL = gameResponse.viewUrl;
+                playURL = gameResponse.playUrl;
+                viewURL = gameResponse.viewUrl;
 
-            myHero = gameResponse.Hero;
-            heroes = gameResponse.Game.Heroes;
+                myHero = gameResponse.Hero;
+                heroes = gameResponse.Game.Heroes;
 
-            currentTurn = gameResponse.Game.Turn;
-            maxTurns = gameResponse.Game.MaxTurns;
-            finished = gameResponse.Game.Finished;
+                currentTurn = gameResponse.Game.Turn;
+                maxTurns = gameResponse.Game.MaxTurns;
+                finished = gameResponse.Game.Finished;
 
-            createBoard(gameResponse.Game.Board.Size, gameResponse.Game.Board.Tiles);
+                createBoard(gameResponse.Game.Board.Size, gameResponse.Game.Board.Tiles);
+            }
+            catch (Exception ex)
+            {
+                errored = true;
+                errorText = ex.Message;
+            }
         }
 
         public async Task moveHero(string direction)
