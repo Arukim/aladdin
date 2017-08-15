@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aladdin.Common;
@@ -14,46 +15,59 @@ namespace Aladdin.Core
         private const string _serverUrl = "http://vindinium.org";
         private const int _turns = 400;
 
-        private readonly IAccountDataProvider _accDataProvider;
+        private readonly IGameDataProvider _gameDataProvider;
 
         public Coach()
         {
-            _accDataProvider = Container.GetService<IAccountDataProvider>();
+            _gameDataProvider = Container.GetService<IGameDataProvider>();
         }
 
-        public void Run(bool isTraining)
+        public void Run(IEnumerable<Tuple<AccountEntity, GenomeEntity>> trainees, int rounds)
         {
-            while (true)
+            int played = 0;
+
+            while (played < rounds)
             {
                 Console.WriteLine("Starting game session");
-                var accs = _accDataProvider.GetAll().ToList();
+                var tasks = new List<Task>();
+                foreach (var trainee in trainees)
+                {
+                    tasks.Add(RunSession(trainee.Item1, trainee.Item2));
+                }
 
-                Parallel.ForEach(accs, acc => RunSession(acc));
+                Task.WaitAll(tasks.ToArray());
                 Console.WriteLine("Game sesion ended");
-                return;
+                played++;
             }
         }
 
-        protected void RunSession(AccountEntity acc)
+        protected async Task RunSession(AccountEntity acc, GenomeEntity genome)
         {
-            var gamesCount = 0;
-            while (gamesCount < 1)
+            try
             {
-                try
-                {
-                    // Connect to server
-                    var server = new ServerStuff(acc.Token, false, _turns, _serverUrl, null);
-                    // Play game
-                    var player = new Player(acc.Name, server);
+                // Connect to server
+                var server = new ServerStuff(acc.Token, false, _turns, _serverUrl, null);
+                // Play game
+                var player = new Player(acc.Name, server);
 
-                    var result = player.Run().Result;
-                    // Save results
-                    gamesCount++;
-                }
-                catch (Exception ex)
+                await player.Run();
+
+                if (server.finished)
                 {
-                    Console.WriteLine("Unhandled exception " + ex);
+                    var result = new GameEntity{
+                        AccoundId = acc.Id,
+                        AccountName = acc.Name,
+                        GameId = server.Id,
+                        GenomeId = genome?.Id,
+                        IsWinner = server.heroes.OrderBy(x => x.Gold).First().Name == acc.Name
+                    };
+                    
+                    await _gameDataProvider.Add(result);
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unhandled exception " + ex);
             }
         }
     }

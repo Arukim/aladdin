@@ -13,7 +13,7 @@ namespace Aladdin.Core
 {
     public class Player
     {
-        private ServerStuff serverStuff;
+        public ServerStuff ServerStuff;
         private readonly string _name;
 
         public string Name => _name;
@@ -21,41 +21,41 @@ namespace Aladdin.Core
         public Player(string name, ServerStuff serverStuff)
         {
             _name = name;
-            this.serverStuff = serverStuff;
+            this.ServerStuff = serverStuff;
         }
 
         //starts everything
-        public async Task<GameResult> Run()
+        public async Task Run()
         {
             Console.WriteLine($"{Name} is waiting for game");
 
-            await serverStuff.CreateGame();
+            await ServerStuff.CreateGame();
 
-            if (serverStuff.errored == false)
+            if (ServerStuff.errored == false)
             {
-                Console.WriteLine($"{Name} has joined game {serverStuff.viewURL}");
+                Console.WriteLine($"{Name} has joined game {ServerStuff.viewURL}");
             }
             else
             {
-                return new GameResult();
+                return;
             }
 
-            while (serverStuff.finished == false && serverStuff.errored == false)
+            while (ServerStuff.finished == false && ServerStuff.errored == false)
             {
                 var dir = MakeMove();
-                await serverStuff.moveHero(dir);
+                await ServerStuff.moveHero(dir);
 
                 //Console.WriteLine("completed turn " + serverStuff.currentTurn);
             }
 
-            if (serverStuff.errored)
+            if (ServerStuff.errored)
             {
-                Console.Out.WriteLine($"{Name} error in game: " + serverStuff.errorText);
+                Console.Out.WriteLine($"{Name} error in game: " + ServerStuff.errorText);
             }
 
-            Console.Out.WriteLine($"{Name} has finished game {serverStuff.viewURL}");
+            Console.Out.WriteLine($"{Name} has finished game {ServerStuff.viewURL}");
 
-            return new GameResult();
+            return;
         }
 
         protected string MakeMove()
@@ -63,12 +63,12 @@ namespace Aladdin.Core
             var watch = new MultiWatch();
             watch.Start("total");
 
-            var pathFinder = new PathFinder(serverStuff.Board, serverStuff.BoardSize);
+            var pathFinder = new PathFinder(ServerStuff.Board, ServerStuff.BoardSize);
 
-            var tiles = serverStuff.Board;
-            var size = serverStuff.BoardSize;
-            var hero = serverStuff.myHero.Pos;
-            var id = serverStuff.myHero.Id;
+            var tiles = ServerStuff.Board;
+            var size = ServerStuff.BoardSize;
+            var hero = ServerStuff.myHero.Pos;
+            var id = ServerStuff.myHero.Id;
 
             watch.Measure("pathfinder Init", () => pathFinder.Init(hero));
             //pathFinder.PrintMap();
@@ -91,11 +91,11 @@ namespace Aladdin.Core
 
             //Console.WriteLine($"Tavern: {tavern}, neutral: {neutralMine}, notMine: {notMineMine}");
             var dir = Direction.Stay;
-            if (serverStuff.myHero.Life < 30)
+            if (ServerStuff.myHero.Life < 30)
             {
                 target = tavern;
             }
-            else if (serverStuff.myHero.Life < 80 && tavern != null && tavernDist < 2)
+            else if (ServerStuff.myHero.Life < 80 && tavern != null && tavernDist < 2)
             {
                 target = tavern;
             }

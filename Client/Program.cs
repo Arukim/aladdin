@@ -7,6 +7,7 @@ using Aladdin.DAL.Models;
 using Aladdin.Game;
 using Aladdin.Core;
 using Aladdin.Common.Interfaces;
+using System.Collections.Generic;
 
 namespace Aladdin
 {
@@ -25,7 +26,11 @@ namespace Aladdin
 
             var coach = Container.GetService<ICoach>();
 
-            coach.Run(false);
+            var accProvider = Container.GetService<IAccountDataProvider>();
+
+            var trainee = Tuple.Create(accProvider.GetMainAccount().Result, new GenomeEntity());
+
+            coach.Run(new List<Tuple<AccountEntity,GenomeEntity>>{trainee}, 1);
 
             Console.Read();
         }

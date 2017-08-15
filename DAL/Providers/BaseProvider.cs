@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Aladdin.DAL.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -31,9 +32,9 @@ namespace Aladdin.DAL.Providers
 
 #region IRepository
 
-        public void Add(T entity)
+        public async Task Add(T entity)
         {
-            throw new NotImplementedException();
+            await Collection.InsertOneAsync(entity);
         }
 
         public T Find(int id)

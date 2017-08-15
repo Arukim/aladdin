@@ -20,6 +20,7 @@ namespace Aladdin.Game
 
         private string playURL;
         public string viewURL { get; private set; }
+        public string Id { get; private set; }
 
         public Hero myHero { get; private set; }
         public List<Hero> heroes { get; private set; }
@@ -99,6 +100,7 @@ namespace Aladdin.Game
 
                 playURL = gameResponse.playUrl;
                 viewURL = gameResponse.viewUrl;
+                Id = gameResponse.Game.Id;
 
                 myHero = gameResponse.Hero;
                 heroes = gameResponse.Game.Heroes;
